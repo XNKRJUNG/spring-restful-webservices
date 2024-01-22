@@ -1,6 +1,7 @@
 package com.cyrus.rest.webservices.restfulwebservices.socialmedia.controller;
 
 import com.cyrus.rest.webservices.restfulwebservices.socialmedia.entity.User;
+import com.cyrus.rest.webservices.restfulwebservices.socialmedia.exception.UserNotFoundException;
 import com.cyrus.rest.webservices.restfulwebservices.socialmedia.service.UserDaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,12 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public User retriveUser(@PathVariable int userId) {
-        return userService.findUserById(userId);
+        User retrivedUser = userService.findUserById(userId);
+        if(retrivedUser==null)
+        {
+            throw new UserNotFoundException("id:"+userId);
+        }
+        return retrivedUser;
     }
 
     @PostMapping("/users")
